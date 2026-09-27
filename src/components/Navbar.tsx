@@ -1,105 +1,59 @@
-import { Navbar as HeroUiNavbar, NavbarBrand, NavbarContent, NavbarItem, Link, DropdownItem, DropdownTrigger, DropdownMenu, Dropdown, Avatar, NavbarMenuToggle, Button, NavbarMenu, NavbarMenuItem } from "@heroui/react";
-import React from "react";
-
+import {
+  Navbar as HeroUiNavbar,
+  NavbarBrand,
+  NavbarContent,
+  DropdownItem,
+  DropdownTrigger,
+  Dropdown,
+  DropdownMenu,
+  Avatar,
+} from "@heroui/react";
+import { Link } from "react-router-dom";
+import samarLogo from '../assets/logos/samar-app-icon.png';
+import samarWord from '../assets/logos/samar-wordmark-light.png'
+import defaultProfile from '../assets/logos/default-profile-image.jpg'
 
 export default function Navbar() {
-
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
-  const menuItems = [
-    "Profile",
-    "Dashboard",
-    "Activity",
-    "Analytics",
-    "System",
-    "Deployments",
-    "My Settings",
-    "Team Settings",
-    "Help & Feedback",
-    "Log Out",
-  ];
-
   return (
-    <HeroUiNavbar shouldHideOnScroll onMenuOpenChange={setIsMenuOpen}>
-      <NavbarContent>
-        <NavbarMenuToggle
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          className="sm:hidden"
-        />
-        <NavbarBrand>
-          <div className="flex items-center justify-center gap-1.5 mt-1 p-3">
-            <img src="../src/assets/logos/samar-symbol.png" alt="samar-symbol"></img>
-            <img src="../src/assets/logos/samar-wordmark-light.png" alt="samar-wordmark-light" className=" h-10"></img>
-          </div>
-        </NavbarBrand>
-      </NavbarContent>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem isActive>
-          <Link className="text-primary" aria-current="page" href="#">
-            Home
-          </Link>
-        </NavbarItem>
-        <NavbarItem >
-          <Link href="#">
-            Profile
-          </Link>
-        </NavbarItem>
-      </NavbarContent>
-      <NavbarContent as="div" justify="end">
-        <Dropdown placement="bottom-end">
+    <HeroUiNavbar className="py-1 border-b border-b-text-secondary rounded-2xl" maxWidth="full" classNames={{wrapper: 'grow'}}>
+      <NavbarBrand>
+        <Link to={"/"} className="px-2 py-3 flex flex-row gap-2">
+          <img src={samarLogo} alt="samar" className="w-13 h-12"></img>
+          <img src={samarWord} alt="samar-wordmark" className="h-10"></img>
+        </Link>
+      </NavbarBrand>
+
+      <NavbarContent as="div" justify="end" className="py-3 flex flex-row gap-1 px-5 ml-20 md:ml-0">
+        <Dropdown placement="bottom-start">
           <DropdownTrigger>
             <Avatar
               isBordered
               as="button"
-              className="transition-transform"
+              className="transition-transform w-12 h-12 rounded-full border ring-1 ring-primary cursor-pointer object-cover overflow-hidden "
               color="secondary"
-              name="Jason Hughes"
-              size="sm"
-              src="../scr/assets/logos/default-profile-image.jpg"
+              name={"user name"}
+              src={defaultProfile}
             />
           </DropdownTrigger>
-          <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem key="profile" className="h-14 gap-2">
-              <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">zoey@example.com</p>
+          <DropdownMenu aria-label="Profile Actions" variant="flat" className="bg-elevated flex flex-col gap-3 rounded-xl ">
+            <DropdownItem key="profile">
+              <Link className="h-14 text-text-primary" to="/profile">
+                <p className="font-semibold">Signed in as</p>
+                <p className="font-semibold">test@test.test</p>
+              </Link>
             </DropdownItem>
-            <DropdownItem key="settings">Edit Profile</DropdownItem>
-            <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-            <DropdownItem key="logout" color="danger">
+            <DropdownItem key="signin" className="text-text-primary">
+              <Link to={"/signin"} className="text-text-primary px-1">Sign-In</Link>
+            </DropdownItem>
+            <DropdownItem key="signup" className="text-text-primary">
+              <Link to={"/signup"} className="text-text-primary px-1">Sign-Up</Link>
+            </DropdownItem>  
+            <DropdownItem key="logout" className="text-danger">
               Log Out
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </NavbarContent>
-      <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link href="/singin">Sign In</Link>
-        </NavbarItem>
-        <NavbarItem className="hidden lg:flex">
-          <Link href="signup">Sign Up</Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
-            Sign Up
-          </Button>
-        </NavbarItem>
-      </NavbarContent>
-      <NavbarMenu>
-        {menuItems.map((item, index) => (
-          <NavbarMenuItem key={`${item}-${index}`}>
-            <Link
-              className="w-full"
-              color={
-                index === 2 ? "primary" : index === menuItems.length - 1 ? "danger" : "foreground"
-              }
-              href="#"
-              size="lg"
-            >
-              {item}
-            </Link>
-          </NavbarMenuItem>
-        ))}
-      </NavbarMenu>
     </HeroUiNavbar>
   );
 }

@@ -21,5 +21,6 @@
 }
 
 body {
-  background-color: --color-background;
+  background-color: var(--color-background);
+  min-height: 100vh;
 }
