@@ -27,9 +27,11 @@ export  const signUpSchema = z.object({
         return birthDateClean <= cutDate;
     }, {
         message: `You must be at least 18 years old to register.`,
-    }),
+    }).transform((date) => date.toISOString().split('T')[0]),
     gender: z.string().nonempty('Please select a Gender').regex(regex.gender, `Gender must be Male or Female`),
 }).refine((data) => data.password == data.rePassword, {
     message: `Password and confirm password should match`,
     path: ['rePassword']
 });
+
+export type RegisterData = z.output<typeof signUpSchema>;
