@@ -34,15 +34,15 @@ export default function SignUp() {
       setSuccessMsg(response.message);
       navigate('/signin')
     } catch (error) {
-      if(axios.isAxiosError(error)) {
-      setErrMsg(error.response?.data.message);
-      if (!error.response?.data.message) {
-        setErrMsg('Network error');
-      }
-      }else{
+      if (axios.isAxiosError(error)) {
+        setErrMsg(error.response?.data.message);
+        if (!error.response?.data.message) {
+          setErrMsg('Network error');
+        }
+      } else {
         setErrMsg('Unexpected error');
       }
-    }finally {
+    } finally {
       setIsLoading(false);
     }
   }
