@@ -23,6 +23,7 @@ class AuthServices {
         })
         return data;
     }
+
 }
 
 export const authServices = new AuthServices()

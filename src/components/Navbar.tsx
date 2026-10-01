@@ -1,21 +1,25 @@
 import {
+  Avatar,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
   Navbar as HeroUiNavbar,
   NavbarBrand,
   NavbarContent,
-  DropdownItem,
-  DropdownTrigger,
-  Dropdown,
-  DropdownMenu,
-  Avatar,
 } from "@heroui/react";
 import { Link } from "react-router-dom";
+import defaultProfile from '../assets/logos/default-profile-image.jpg';
 import samarLogo from '../assets/logos/samar-app-icon.png';
-import samarWord from '../assets/logos/samar-wordmark-light.png'
-import defaultProfile from '../assets/logos/default-profile-image.jpg'
+import samarWord from '../assets/logos/samar-wordmark-light.png';
+import { useAuth } from "../hooks/useAuth";
 
 export default function Navbar() {
+
+  const { logout } = useAuth()
+
   return (
-    <HeroUiNavbar className="py-1 border-b border-b-text-secondary rounded-2xl" maxWidth="full" classNames={{wrapper: 'grow'}}>
+    <HeroUiNavbar className="py-1 border-b border-b-text-secondary rounded-2xl" maxWidth="full" classNames={{ wrapper: 'grow' }}>
       <NavbarBrand>
         <Link to={"/"} className="px-2 py-3 flex flex-row gap-2">
           <img src={samarLogo} alt="samar" className="w-13 h-12"></img>
@@ -42,13 +46,7 @@ export default function Navbar() {
                 <p className="font-semibold">test@test.test</p>
               </Link>
             </DropdownItem>
-            <DropdownItem key="signin" className="text-text-primary">
-              <Link to={"/signin"} className="text-text-primary px-1">Sign-In</Link>
-            </DropdownItem>
-            <DropdownItem key="signup" className="text-text-primary">
-              <Link to={"/signup"} className="text-text-primary px-1">Sign-Up</Link>
-            </DropdownItem>  
-            <DropdownItem key="logout" className="text-danger">
+            <DropdownItem key="logout" className="text-danger" onClick={logout}>
               Log Out
             </DropdownItem>
           </DropdownMenu>

@@ -31,8 +31,14 @@ export default function AuthContextProvider({ children, }: { children: ReactElem
         }
     }, []);
 
+    function logout() {
+        localStorage.removeItem('token');
+        setIsLoggedIn(false);
+        setUserData(undefined);
+    }
+
     return (
-        <authContext.Provider value={{ isLoggedIn, isLoading, setIsLoggedIn, userData }}>
+        <authContext.Provider value={{ isLoggedIn, isLoading, setIsLoggedIn, userData, logout }}>
             {children}
         </authContext.Provider>
     )
