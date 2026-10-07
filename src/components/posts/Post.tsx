@@ -1,8 +1,8 @@
-import { Trash } from "lucide-react";
 import formatRelativeTime from "../../helpers/timeFormat";
 import { useAuth } from "../../hooks/useAuth";
 import type { PostI } from "../../interfaces/postI";
 import Comment from "../Comment";
+import DeletePost from "./DeletePost";
 
 
 
@@ -21,7 +21,7 @@ export default function Post({ post }: { post: PostI }) {
           </div>
         </div>
         {post.user._id === userData?._id && (
-          <Trash className="text-warning cursor-pointer" />
+          <DeletePost postId={post._id} />
         )}
       </div>
       {post.body && <p className="mt-4">{post.body}</p>}

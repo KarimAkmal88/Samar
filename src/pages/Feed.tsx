@@ -1,41 +1,32 @@
 import { Button, Card, Skeleton, Spinner } from "@heroui/react";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import CreatePost from "../components/posts/CreatePost";
 import Post from "../components/posts/Post";
-import type { PostI } from "../interfaces/postI";
 import { postsServices } from "../services/postsService";
 
 
 export default function Feed() {
 
-  const [posts, setPosts] = useState<PostI[]>([]);
-  const [errMsg, setErrMsg] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    getAllPosts();
-  }, []);
+  const {
+    data: posts = [],
+    isLoading,
+    isFetching,
+    refetch,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['posts'],
+    queryFn: postsServices.getAllPosts,
+    select: (data) => data.data.posts,
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+    refetchOnWindowFocus: true,
+    retry: 3,
+    retryDelay: 3000,
+  })
 
-  async function getAllPosts(): Promise<void> {
-    setErrMsg('');
-    setIsLoading(true);
-    try {
-      const { data } = await postsServices.getAllPosts();
-      setPosts(data.posts);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        setErrMsg(error.response?.data.message);
-        if (!error.response?.data.message) {
-          setErrMsg('Network error');
-        }
-      } else {
-        setErrMsg('Unexpected error');
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  }
+
 
   return (
     <>
@@ -60,25 +51,25 @@ export default function Feed() {
           </div>
         </Card>
       ) :
-        errMsg && posts.length === 0 ? (
+        isError && posts.length === 0 ? (
           <div className="bg-elevated text-text-primary">
-            <p className="text-2xl">{errMsg}</p>
-            <Button color="secondary" onClick={getAllPosts}>Retry</Button>
+            <p className="text-2xl">{error.message}</p>
+            <Button color="secondary" onClick={refetch}>Retry</Button>
           </div>
         ) : (
           <>
-            {isLoading && posts.length > 0 && <Spinner />}
+            {isFetching && posts.length > 0 && <Spinner />}
 
-            {errMsg && posts.length > 0 &&
+            {isError && posts.length > 0 &&
               <div className="bg-elevated text-text-primary">
-                <p className="text-2xl">{errMsg}</p>
-                <Button color="secondary" onClick={getAllPosts}>Retry</Button>
+                <p className="text-2xl">{error.message}</p>
+                <Button color="secondary" onClick={refetch}>Retry</Button>
               </div>
             }
 
             <div className="max-w-3xl my-10 mx-auto">
               <div className="grid gap-4 rounded-2xl bg-elevated border border-text-secondary text-text-primary">
-                <CreatePost getAllPosts={getAllPosts} />
+                <CreatePost getAllPosts={refetch} />
 
                 {posts.map((post) => (
                   <Post key={post._id} post={post} />
