@@ -25,10 +25,12 @@ export default function DeletePost({ postId }: { postId: string }) {
       onClose();
     },
   });
-
+  
   return (
     <>
-      <Eraser onClick={onOpen} />
+      <Eraser onClick={() => {
+        onOpen();
+      }} className="cursor-pointer" />
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (

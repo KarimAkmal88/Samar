@@ -22,7 +22,7 @@ export default function SignIn() {
   const [errMsg, setErrMsg] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
-  const { setIsLoggedIn } = useAuth()
+  const { initializeSession, logout } = useAuth()
 
   const { handleSubmit, register, formState: { errors }, reset } = useForm({ resolver: zodResolver(signInSchema), mode: 'onBlur' });
   async function signIn(data: LoginData) {
@@ -32,10 +32,11 @@ export default function SignIn() {
     try {
       const response = await authServices.signIn(data);
       localStorage.setItem('token', response.data.token);
-      setIsLoggedIn(true);
+      await initializeSession();
       setSuccessMsg(response.message);
 
     } catch (error) {
+      logout();
       if (axios.isAxiosError(error)) {
         setErrMsg(error.response?.data.message);
         if (!error.response?.data.message) {

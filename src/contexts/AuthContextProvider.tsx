@@ -1,6 +1,6 @@
-import {  useEffect, useState, type ReactElement } from "react"
-import { authServices } from "../services/authService";
+import { useEffect, useState, type ReactElement } from "react";
 import type { UserI } from "../interfaces/userI";
+import { authServices } from "../services/authService";
 import { authContext } from "./authContext";
 
 
@@ -17,9 +17,7 @@ export default function AuthContextProvider({ children, }: { children: ReactElem
         if (localStorage.getItem('token')) {
             async function restoreSession() {
                 try {
-                    const { data } = await authServices.getUserData();
-                    setUserData(data.user);
-                    setIsLoggedIn(true);
+                   await initializeSession();
                 } catch {
                     setIsLoggedIn(false);
                     localStorage.removeItem('token')
@@ -37,8 +35,14 @@ export default function AuthContextProvider({ children, }: { children: ReactElem
         setUserData(undefined);
     }
 
+    async function initializeSession(){
+        const {data} =  await authServices.getUserData();
+        setUserData(data.user);
+        setIsLoggedIn(true);
+    }
+
     return (
-        <authContext.Provider value={{ isLoggedIn, isLoading, setIsLoggedIn, userData, logout }}>
+        <authContext.Provider value={{ isLoggedIn, isLoading, setIsLoggedIn, userData, logout, initializeSession }}>
             {children}
         </authContext.Provider>
     )

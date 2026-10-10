@@ -1,14 +1,18 @@
+import { Pen } from "lucide-react";
+import { useState } from "react";
 import formatRelativeTime from "../../helpers/timeFormat";
 import { useAuth } from "../../hooks/useAuth";
 import type { PostI } from "../../interfaces/postI";
 import Comment from "../Comment";
 import DeletePost from "./DeletePost";
+import EditPost from "./EditPost";
 
 
 
 export default function Post({ post }: { post: PostI }) {
 
   const { userData } = useAuth()
+  const [isEditing, setIsEditing] = useState(false)
 
   return (
     <div className="bg-elevated w-full rounded-md shadow-md h-auto py-3 my-3">
@@ -21,10 +25,13 @@ export default function Post({ post }: { post: PostI }) {
           </div>
         </div>
         {post.user._id === userData?._id && (
+          <>
           <DeletePost postId={post._id} />
+          <Pen className="cursor-pointer" onClick={() => setIsEditing(true)}/>
+          </>
         )}
       </div>
-      {post.body && <p className="mt-4">{post.body}</p>}
+      {isEditing ? <EditPost postId={post._id} body={post.body} onCancel={() => setIsEditing(false)}/> : post.body && <p className="mt-4">{post.body}</p>}
       {post.image && (
         <img src={post.image} className="w-full object-cover mt-2" alt={post.user.name} />
       )}

@@ -7,4 +7,5 @@ export type AuthContextType = {
     userData: UserI | undefined,
     setIsLoggedIn: Dispatch<SetStateAction<boolean>>,
     logout: () => void,
-}
+    initializeSession: () => Promise<void>,
+}    
